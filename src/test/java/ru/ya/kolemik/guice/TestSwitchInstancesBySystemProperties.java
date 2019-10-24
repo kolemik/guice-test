@@ -18,6 +18,7 @@ import ru.ya.kolemik.guice.api.Hello;
 @RunWith(Parameterized.class)
 public class TestSwitchInstancesBySystemProperties {
     private Injector injector;
+    private String counter;
 
     @Parameters(name = "counter = {0}")
     public static Collection<String> names() {
@@ -26,7 +27,7 @@ public class TestSwitchInstancesBySystemProperties {
 
     public TestSwitchInstancesBySystemProperties(String counterName) {
         System.setProperty("counter", counterName);
-
+        counter = counterName;
         injector = Guice.createInjector(new BasicModule());
     }
 
@@ -36,7 +37,19 @@ public class TestSwitchInstancesBySystemProperties {
             Hello hello = injector.getInstance(Hello.class);
             String response = hello.sayHello("Max");
             System.out.println("RESP: " + response);
-            assertTrue(response.contains((i + 1) + "\t"));
+            switch (counter) {
+            case "sync":
+                assertTrue(response.contains("\t" + (i + 1) + "\t"));
+                break;
+            case "atomic":
+                assertTrue(response.contains("\t" + (i + 101) + "\t"));
+                break;
+            case "static":
+                assertTrue(response.contains("\t" + (i + 201) + "\t"));
+                break;
+            default:
+                fail("unexpected counter: " + counter);
+            }
         }
     }
 
