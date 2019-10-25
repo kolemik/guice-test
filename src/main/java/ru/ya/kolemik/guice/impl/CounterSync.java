@@ -1,10 +1,12 @@
 package ru.ya.kolemik.guice.impl;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import ru.ya.kolemik.guice.api.Counter;
 
 @Singleton
+@Named("sync")
 public class CounterSync implements Counter {
 
     int c = 0;

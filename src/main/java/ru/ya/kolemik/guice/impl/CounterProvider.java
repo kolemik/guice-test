@@ -9,6 +9,7 @@ import com.google.inject.name.Names;
 
 import ru.ya.kolemik.guice.api.Config;
 import ru.ya.kolemik.guice.api.Counter;
+import ru.ya.kolemik.guice.api.Default;
 
 public class CounterProvider implements Provider<Counter> {
 
@@ -21,6 +22,10 @@ public class CounterProvider implements Provider<Counter> {
     public Counter get() { // called every time an injection performed -- so may return different instances during runtime
         String counterProp = config.getProperty("counter");
         System.out.println("PROVIDER");
-        return injector.getInstance(Key.get(Counter.class, Names.named(counterProp)));
+        if (counterProp != null && !counterProp.isEmpty() && injector.getBindings().containsKey(Key.get(Counter.class, Names.named(counterProp)))) {
+            return injector.getInstance(Key.get(Counter.class, Names.named(counterProp)));
+        } else {
+            return injector.getInstance(Key.get(Counter.class, Default.class));
+        }
     }
 }

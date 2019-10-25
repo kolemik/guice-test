@@ -22,11 +22,13 @@ public class TestSwitchInstancesBySystemProperties {
 
     @Parameters(name = "counter = {0}")
     public static Collection<String> names() {
-        return Arrays.asList("atomic", "static", "sync");
+        return Arrays.asList(null, "atomic", "static", "sync", "qwe");
     }
 
     public TestSwitchInstancesBySystemProperties(String counterName) {
-        System.setProperty("counter", counterName);
+        if (counterName != null) {
+            System.setProperty("counter", counterName);
+        }
         counter = counterName;
         injector = Guice.createInjector(new BasicModule());
     }
@@ -37,18 +39,17 @@ public class TestSwitchInstancesBySystemProperties {
             Hello hello = injector.getInstance(Hello.class);
             String response = hello.sayHello("Max");
             System.out.println("RESP: " + response);
-            switch (counter) {
+            switch (counter==null?"":counter) {
             case "sync":
                 assertTrue(response.contains("\t" + (i + 1) + "\t"));
-                break;
-            case "atomic":
-                assertTrue(response.contains("\t" + (i + 101) + "\t"));
                 break;
             case "static":
                 assertTrue(response.contains("\t" + (i + 201) + "\t"));
                 break;
+            case "atomic":
             default:
-                fail("unexpected counter: " + counter);
+                assertTrue(response.contains("\t" + (i + 101) + "\t"));
+                break;
             }
         }
     }

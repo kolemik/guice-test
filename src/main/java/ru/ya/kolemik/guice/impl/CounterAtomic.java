@@ -5,7 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Singleton;
 
 import ru.ya.kolemik.guice.api.Counter;
+import ru.ya.kolemik.guice.api.Default;
 
+@Default
 @Singleton
 public class CounterAtomic implements Counter {
 

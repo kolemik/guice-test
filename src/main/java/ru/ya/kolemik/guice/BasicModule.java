@@ -5,6 +5,7 @@ import com.google.inject.name.Names;
 
 import ru.ya.kolemik.guice.api.Config;
 import ru.ya.kolemik.guice.api.Counter;
+import ru.ya.kolemik.guice.api.Default;
 import ru.ya.kolemik.guice.api.Hello;
 import ru.ya.kolemik.guice.impl.ConfigMap;
 import ru.ya.kolemik.guice.impl.CounterAtomic;
@@ -22,6 +23,7 @@ public class BasicModule extends AbstractModule {
         bind(Counter.class).annotatedWith(Names.named("atomic")).to(CounterAtomic.class);
         bind(Counter.class).annotatedWith(Names.named("static")).to(CounterStatic.class);
         bind(Counter.class).toProvider(CounterProvider.class);
+        bind(Counter.class).annotatedWith(Default.class).to(CounterAtomic.class);
         bind(Hello.class).to(HelloSimple.class);
     }
 }
