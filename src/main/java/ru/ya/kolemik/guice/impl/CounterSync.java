@@ -3,7 +3,6 @@ package ru.ya.kolemik.guice.impl;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import ru.ya.kolemik.guice.api.BP;
 import ru.ya.kolemik.guice.api.Counter;
 
 @Singleton
@@ -16,17 +15,10 @@ public class CounterSync implements Counter {
         System.out.println("SYNC");
     }
 
-    @BP
     public synchronized void inc() {
-        if (c == 2) {
-            RuntimeException t = new RuntimeException();
-            t.printStackTrace();
-            throw t;
-        }
         c++;
     }
 
-    @BP
     public synchronized void dec() {
         c--;
     }
